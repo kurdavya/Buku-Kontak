@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Buku Kontak</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --matte-1: #D8D9DB;
+      --matte-2: #E3E4E6;
+      --matte-3: #ECECEE;
+      --matte-4: #F4F4F5;
+      --line: #C5C6C8;
+      --ink: #111111;
+      --accent: #F14624;
+    }
+
+    * {
+      font-family: 'Inter', sans-serif;
+    }
+
+    body {
+      background-color: var(--matte-2);
+      color: var(--ink);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    h1, h2, h3, .heading {
+      font-family: 'Space Grotesk', sans-serif;
+    }
+
+    .mono {
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .tactile {
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.12);
+      transition: box-shadow 0.15s ease, transform 0.15s ease;
+    }
+
+    .tactile:hover {
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12), 0 2px 4px rgba(0, 0, 0, 0.16);
+      transform: translateY(-1px);
+    }
+
+    .tactile:active {
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12);
+      transform: translateY(0);
+    }
+
+    .btn-raised {
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.08);
+      transition: box-shadow 0.15s ease, transform 0.15s ease;
+    }
+
+    .btn-raised:hover {
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15), 0 2px 4px rgba(0, 0, 0, 0.1);
+      transform: translateY(-1px);
+    }
+
+    .btn-raised:active {
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12);
+      transform: translateY(0);
+    }
+
+    .input-matte {
+      background-color: var(--matte-4);
+      border: 1px solid #C5C6C8;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .input-matte:focus {
+      outline: none;
+      border-color: var(--ink);
+      box-shadow: 0 0 0 2px rgba(17, 17, 17, 0.08);
+    }
+
+    .modal-backdrop {
+      background-color: rgba(17, 17, 17, 0.35);
+      backdrop-filter: blur(2px);
+      transition: opacity 0.2s ease;
+    }
+
+    .modal-content {
+      background-color: var(--matte-3);
+      border: 1px solid #C5C6C8;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15), 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .table-row:hover {
+      background-color: var(--matte-4);
+    }
+
+    .table-row:last-child td:first-child {
+      border-top-left-radius: 0;
+    }
+
+    .table-row:last-child td:last-child {
+      border-top-right-radius: 0;
+    }
+
+    .icon-rail {
+      background-color: var(--ink);
+      border-radius: 0 20px 20px 0;
+      box-shadow: 4px 0 16px rgba(0, 0, 0, 0.12);
+    }
+
+    .rail-btn {
+      color: #A0A1A3;
+      transition: color 0.15s ease, background-color 0.15s ease;
+      border-radius: 12px;
+    }
+
+    .rail-btn:hover {
+      color: var(--matte-4);
+      background-color: rgba(255, 255, 255, 0.08);
+    }
+
+    .rail-btn:active {
+      background-color: rgba(255, 255, 255, 0.12);
+    }
+
+    .rail-btn:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+
+    .btn-add {
+      background-color: var(--ink);
+      color: var(--matte-4);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.1);
+      transition: box-shadow 0.15s ease, transform 0.15s ease;
+    }
+
+    .btn-add:hover {
+      background-color: #222222;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2), 0 2px 4px rgba(0, 0, 0, 0.12);
+      transform: translateY(-1px);
+    }
+
+    .btn-add:active {
+      transform: translateY(0);
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12);
+    }
+
+    .btn-add:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+
+    .btn-icon {
+      background-color: var(--matte-3);
+      color: var(--ink);
+      border: 1px solid #C5C6C8;
+      transition: background-color 0.15s ease, color 0.15s ease;
+    }
+
+    .btn-icon:hover {
+      background-color: var(--matte-4);
+    }
+
+    .btn-icon:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+
+    .btn-danger {
+      color: var(--accent);
+    }
+
+    .btn-danger:hover {
+      background-color: #FEF0ED;
+    }
+
+    .toast {
+      background-color: var(--ink);
+      color: var(--matte-4);
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      animation: slideIn 0.3s ease-out;
+    }
+
+    .toast.success {
+      border-left: 3px solid #10B981;
+    }
+
+    .toast.error {
+      border-left: 3px solid var(--accent);
+    }
+
+    .toast.info {
+      border-left: 3px solid #3B82F6;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateX(100%);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    .toast.hide {
+      animation: slideOut 0.3s ease-out forwards;
+    }
+
+    @keyframes slideOut {
+      from {
+        opacity: 1;
+        transform: translateX(0);
+      }
+      to {
+        opacity: 0;
+        transform: translateX(100%);
+      }
+    }
+
+    .search-bar {
+      background-color: var(--matte-3);
+      border: 1px solid #C5C6C8;
+    }
+
+    .search-bar:focus-within {
+      border-color: var(--ink);
+      box-shadow: 0 0 0 2px rgba(17, 17, 17, 0.08);
+    }
+
+    .contact-card {
+      background-color: var(--matte-3);
+      border: 1px solid #C5C6C8;
+    }
+
+    .total-card {
+      background-color: var(--matte-1);
+      border: 1px solid #C5C6C8;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+    }
+
+    .avatar {
+      background-color: var(--matte-1);
+      color: var(--ink);
+      font-weight: 600;
+      font-family: 'Space Grotesk', sans-serif;
+    }
+
+    .pagination-btn {
+      background-color: var(--matte-3);
+      color: var(--ink);
+      border: 1px solid #C5C6C8;
+      transition: background-color 0.15s ease;
+    }
+
+    .pagination-btn:hover:not(:disabled) {
+      background-color: var(--matte-4);
+    }
+
+    .pagination-btn:disabled {
+      color: #A0A1A3;
+      cursor: not-allowed;
+    }
+
+    .pagination-btn:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+
+    .empty-state {
+      background-color: var(--matte-3);
+      border: 1px dashed #C5C6C8;
+    }
+
+    .skeleton {
+      background: linear-gradient(90deg, var(--matte-1) 0%, var(--matte-2) 50%, var(--matte-1) 100%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite;
+    }
+
+    @keyframes shimmer {
+      0% {
+        background-position: 200% 0;
+      }
+      100% {
+        background-position: -200% 0;
+      }
+    }
+
+    .modal-content::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .modal-content::-webkit-scrollbar-track {
+      background: var(--matte-1);
+      border-radius: 0;
+    }
+
+    .modal-content::-webkit-scrollbar-thumb {
+      background: #A0A1A3;
+      border-radius: 0;
+    }
+
+    .modal-content::-webkit-scrollbar-thumb:hover {
+      background: #888A8D;
+    }
+
+    .visually-hidden {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    .modal-open {
+      overflow: hidden;
+    }
+
+    @media (max-width: 768px) {
+      .icon-rail {
+        display: none;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Icon Rail -->
+  <nav class="icon-rail fixed left-0 top-0 h-full w-16 flex flex-col items-center py-6 z-40" aria-label="Navigasi utama">
+    <div class="flex flex-col items-center gap-2 mb-8">
+      <a href="#" id="railHomeBtn" class="rail-btn w-10 h-10 flex items-center justify-center text-white bg-white/10" aria-label="Buku Kontak" title="Buku Kontak">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
+          <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
+        </svg>
+      </a>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="ml-16 md:ml-24 px-4 md:px-8 py-6 md:py-10 max-w-6xl mx-auto">
+    <!-- Header -->
+    <header class="mb-8">
+      <h1 class="text-3xl md:text-4xl font-bold mb-2">Buku Kontak</h1>
+      <p class="text-gray-600 mono text-xs md:text-sm">Kelola daftar kontak Anda</p>
+    </header>
+
+    <!-- Summary Card -->
+    <section class="mb-8" aria-label="Ringkasan kontak">
+      <div class="total-card rounded-2xl p-6 md:p-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <div>
+          <p class="text-sm text-gray-600 mb-1">Total Kontak Tersimpan</p>
+          <p class="text-4xl md:text-5xl font-bold" id="totalContacts">0</p>
+        </div>
+        <div class="flex flex-col items-start md:items-end">
+          <p class="text-sm text-gray-600">Data tersimpan di server</p>
+          <div class="flex items-center gap-2 mt-2">
+            <div class="w-2 h-2 rounded-full bg-green-500"></div>
+            <span class="text-xs mono text-gray-600">Terhubung</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Search and Actions -->
+    <section class="mb-6 flex flex-col md:flex-row gap-4 items-stretch md:items-center">
+      <div class="search-bar flex items-center rounded-xl px-4 py-3 flex-1">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-500 mr-2" aria-hidden="true">
+          <circle cx="11" cy="11" r="8"></circle>
+          <path d="m21 21-4.35-4.35"></path>
+        </svg>
+        <input
+          type="search"
+          id="searchInput"
+          placeholder="Cari nama, nomor HP, atau email..."
+          class="bg-transparent border-0 focus:outline-none flex-1 text-sm"
+          aria-label="Pencarian kontak"
+        />
+      </div>
+      <button
+        id="addContactBtn"
+        class="btn-add rounded-xl px-5 py-3 flex items-center justify-center gap-2 font-medium whitespace-nowrap"
+        aria-label="Tambah kontak baru"
+      >
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <line x1="12" y1="5" x2="12" y2="19"></line>
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+        </svg>
+        Tambah Kontak
+      </button>
+    </section>
+
+    <!-- Contacts List -->
+    <section aria-label="Daftar kontak">
+      <div class="contact-card rounded-2xl overflow-hidden">
+        <!-- Table Header -->
+        <div class="hidden md:grid grid-cols-12 gap-4 px-6 py-3 bg-matte-1 border-b border-matte-1 text-xs mono font-medium text-gray-600 uppercase tracking-wider">
+          <div class="col-span-4">Nama</div>
+          <div class="col-span-3">No. HP</div>
+          <div class="col-span-3">Email</div>
+          <div class="col-span-2 text-right">Aksi</div>
+        </div>
+
+        <!-- Table Body -->
+        <div id="contactsList" class="divide-y divide-matte-1">
+          <!-- Rows will be inserted here -->
+        </div>
+
+        <!-- Empty State -->
+        <div id="emptyState" class="hidden py-12 px-6 text-center">
+          <div class="empty-state rounded-xl p-8 max-w-md mx-auto">
+            <div class="w-16 h-16 mx-auto mb-4 flex items-center justify-center">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-gray-400" aria-hidden="true">
+                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                <circle cx="9" cy="7" r="4"></circle>
+                <line x1="19" y1="8" x2="19" y2="14"></line>
+                <line x1="22" y1="11" x2="16" y2="11"></line>
+              </svg>
+            </div>
+            <h3 class="text-lg font-semibold mb-2">Belum ada kontak</h3>
+            <p class="text-sm text-gray-600 mb-6">Mulai dengan menambahkan kontak pertama Anda</p>
+            <button
+              id="emptyAddBtn"
+              class="btn-add rounded-xl px-4 py-2 text-sm inline-flex items-center gap-2"
+              aria-label="Tambah kontak dari state kosong"
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+              </svg>
+              Tambah Kontak
+            </button>
+          </div>
+        </div>
+
+        <!-- Loading State -->
+        <div id="loadingState" class="py-4 px-6 space-y-3">
+          <!-- Skeleton rows will be here -->
+        </div>
+
+        <!-- Error State -->
+        <div id="errorState" class="hidden py-12 px-6 text-center">
+          <div class="max-w-md mx-auto">
+            <div class="w-16 h-16 mx-auto mb-4 flex items-center justify-center">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-red-500" aria-hidden="true">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="8" x2="12" y2="12"></line>
+                <line x1="12" y1="16" x2="12.01" y2="16"></line>
+              </svg>
+            </div>
+            <h3 class="text-lg font-semibold mb-2">Gagal memuat kontak</h3>
+            <p class="text-sm text-gray-600 mb-6">Periksa koneksi server dan coba lagi</p>
+            <button
+              id="retryBtn"
+              class="btn-add rounded-xl px-4 py-2 text-sm inline-flex items-center gap-2"
+              aria-label="Coba lagi memuat kontak"
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="23 4 23 10 17 10"></polyline>
+                <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+              </svg>
+              Coba Lagi
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pagination / Counter -->
+      <div id="pagination" class="mt-6 flex items-center justify-between">
+        <div class="text-sm text-gray-600 mono">
+          Menampilkan <span id="showingStart">0</span> - <span id="showingEnd">0</span> dari <span id="totalCount">0</span> kontak
+        </div>
+        <div class="flex gap-2 hidden">
+          <button id="prevPageBtn" class="pagination-btn rounded-lg px-3 py-1 text-sm" disabled aria-label="Halaman sebelumnya">Sebelumnya</button>
+          <button id="nextPageBtn" class="pagination-btn rounded-lg px-3 py-1 text-sm" disabled aria-label="Halaman berikutnya">Berikutnya</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Add/Edit Contact Modal -->
+  <div id="contactModal" class="fixed inset-0 z-50 hidden">
+    <div class="modal-backdrop absolute inset-0" aria-hidden="true"></div>
+    <div class="absolute inset-0 flex items-center justify-center p-4">
+      <div class="modal-content rounded-2xl w-full max-w-md max-h-[90vh] overflow-y-auto" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+        <div class="p-6">
+          <div class="flex items-start justify-between mb-6">
+            <h2 id="modalTitle" class="text-xl font-bold">Tambah Kontak</h2>
+            <button id="closeModalBtn" class="text-gray-500 hover:text-gray-700 p-1" aria-label="Tutup modal">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
+            </button>
+          </div>
+
+          <form id="contactForm" class="space-y-4">
+            <div>
+              <label for="namaInput" class="block text-sm font-medium mb-1">Nama Lengkap</label>
+              <input
+                type="text"
+                id="namaInput"
+                name="nama"
+                maxlength="100"
+                class="input-matte w-full rounded-lg px-3 py-2 text-sm"
+                placeholder="Masukkan nama lengkap (maks 100 karakter)"
+                required
+                aria-describedby="namaError"
+              />
+              <p id="namaError" class="text-xs text-red-500 mt-1 hidden"></p>
+            </div>
+
+            <div>
+              <label for="noHpInput" class="block text-sm font-medium mb-1">No. HP</label>
+              <input
+                type="tel"
+                id="noHpInput"
+                name="no_hp"
+                maxlength="15"
+                pattern="[0-9]{10,15}"
+                class="input-matte w-full rounded-lg px-3 py-2 text-sm"
+                placeholder="Contoh: 08123456789 (10-15 digit angka)"
+                required
+                aria-describedby="noHpError"
+              />
+              <p id="noHpError" class="text-xs text-red-500 mt-1 hidden"></p>
+            </div>
+
+            <div>
+              <label for="emailInput" class="block text-sm font-medium mb-1">Email</label>
+              <input
+                type="email"
+                id="emailInput"
+                name="email"
+                maxlength="100"
+                class="input-matte w-full rounded-lg px-3 py-2 text-sm"
+                placeholder="contoh@email.com (maks 100 karakter)"
+                required
+                aria-describedby="emailError"
+              />
+              <p id="emailError" class="text-xs text-red-500 mt-1 hidden"></p>
+            </div>
+
+            <div>
+              <label for="alamatInput" class="block text-sm font-medium mb-1">Alamat</label>
+              <textarea
+                id="alamatInput"
+                name="alamat"
+                maxlength="1000"
+                class="input-matte w-full rounded-lg px-3 py-2 text-sm"
+                placeholder="Masukkan alamat lengkap (maks 1000 karakter)"
+                rows="3"
+                required
+                aria-describedby="alamatError"
+              ></textarea>
+              <p id="alamatError" class="text-xs text-red-500 mt-1 hidden"></p>
+            </div>
+
+            <div class="flex gap-3 pt-4">
+              <button
+                type="button"
+                id="cancelBtn"
+                class="flex-1 btn-icon rounded-lg px-4 py-2 text-sm font-medium"
+                aria-label="Batal"
+              >
+                Batal
+              </button>
+              <button
+                type="submit"
+                id="submitBtn"
+                class="flex-1 btn-add rounded-lg px-4 py-2 text-sm font-medium"
+                aria-label="Simpan kontak"
+              >
+                Simpan
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Detail Contact Modal -->
+  <div id="detailModal" class="fixed inset-0 z-50 hidden">
+    <div class="modal-backdrop absolute inset-0" aria-hidden="true"></div>
+    <div class="absolute inset-0 flex items-center justify-center p-4">
+      <div class="modal-content rounded-2xl w-full max-w-md max-h-[90vh] overflow-y-auto" role="dialog" aria-modal="true" aria-labelledby="detailModalTitle">
+        <div class="p-6">
+          <div class="flex items-start justify-between mb-6">
+            <h2 id="detailModalTitle" class="text-xl font-bold">Detail Kontak</h2>
+            <button id="closeDetailModalBtn" class="text-gray-500 hover:text-gray-700 p-1" aria-label="Tutup modal">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
+            </button>
+          </div>
+
+          <div id="detailContent" class="space-y-4">
+            <!-- Content will be inserted here -->
+          </div>
+
+          <div class="flex gap-3 mt-6 pt-4 border-t border-matte-1">
+            <button
+              id="editFromDetailBtn"
+              class="flex-1 btn-icon rounded-lg px-4 py-2 text-sm font-medium"
+              aria-label="Edit kontak"
+            >
+              Edit
+            </button>
+            <button
+              id="deleteFromDetailBtn"
+              class="flex-1 btn-icon btn-danger rounded-lg px-4 py-2 text-sm font-medium"
+              aria-label="Hapus kontak"
+            >
+              Hapus
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete Confirmation Modal -->
+  <div id="deleteModal" class="fixed inset-0 z-50 hidden">
+    <div class="modal-backdrop absolute inset-0" aria-hidden="true"></div>
+    <div class="absolute inset-0 flex items-center justify-center p-4">
+      <div class="modal-content rounded-2xl w-full max-w-sm" role="dialog" aria-modal="true" aria-labelledby="deleteModalTitle">
+        <div class="p-6">
+          <div class="flex items-start justify-between mb-4">
+            <h2 id="deleteModalTitle" class="text-xl font-bold">Hapus Kontak?</h2>
+            <button id="closeDeleteModalBtn" class="text-gray-500 hover:text-gray-700 p-1" aria-label="Tutup modal">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
+            </button>
+          </div>
+
+          <p class="text-sm text-gray-600 mb-6">Apakah Anda yakin ingin menghapus kontak ini? Tindakan ini tidak dapat dibatalkan.</p>
+
+          <div class="flex gap-3">
+            <button
+              id="cancelDeleteBtn"
+              class="flex-1 btn-icon rounded-lg px-4 py-2 text-sm font-medium"
+              aria-label="Batal"
+            >
+              Batal
+            </button>
+            <button
+              id="confirmDeleteBtn"
+              class="flex-1 bg-red-600 text-white rounded-lg px-4 py-2 text-sm font-medium hover:bg-red-700 transition-colors"
+              aria-label="Konfirmasi hapus"
+            >
+              Hapus
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div id="toastContainer" class="fixed bottom-4 right-4 z-50 flex flex-col gap-2" aria-live="polite" aria-atomic="true"></div>
+
+  <!-- App.js -->
+  <script src="app.js"></script>
+</body>
+</html>
